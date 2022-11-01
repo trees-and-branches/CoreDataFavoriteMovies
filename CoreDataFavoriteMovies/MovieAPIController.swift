@@ -10,7 +10,7 @@ import Foundation
 struct SearchResponse: Codable {
     let movies: [APIMovie]
     
-    enum CodingKey: String {
+    enum CodingKeys: String, CodingKey {
         case movies = "Search"
     }
 }
@@ -20,6 +20,15 @@ struct APIMovie: Codable {
     let year: String
     let imdbID: String
     let posterURL: URL
+    
+
+    enum CodingKeys: String, CodingKey {
+        case title = "Title"
+        case year = "Year"
+        case imdbID
+        case posterURL = "Poster"
+    }
+
 }
 
 class MovieAPIController {
