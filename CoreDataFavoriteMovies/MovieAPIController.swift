@@ -15,12 +15,13 @@ struct SearchResponse: Codable {
     }
 }
 
-struct APIMovie: Codable {
+struct APIMovie: Codable, Identifiable, Hashable {
     let title: String
     let year: String
     let imdbID: String
-    let posterURL: URL
+    let posterURL: URL?
     
+    var id: String { imdbID }
 
     enum CodingKeys: String, CodingKey {
         case title = "Title"
@@ -38,7 +39,7 @@ class MovieAPIController {
     
     func fetchMovies(with searchTerm: String) async throws -> [APIMovie] {
         var searchURL = baseURL
-        let searchItem = URLQueryItem(name: "s", value: searchTerm.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed))
+        let searchItem = URLQueryItem(name: "s", value: searchTerm)
         let apiKeyItem = URLQueryItem(name: "apiKey", value: apiKey)
         searchURL.append(queryItems: [searchItem, apiKeyItem])
         let (data, _) = try await URLSession.shared.data(from: searchURL)

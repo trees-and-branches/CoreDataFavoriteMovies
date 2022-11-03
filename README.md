@@ -75,7 +75,7 @@
         - Give it one property `let movies: [APIMovie]`
     - Then add this enum so the coding keys will match up with the api:
     ```
-    enum CodingKey: String {
+    enum CodingKeys: String, CodingKey {
         case movies = "Search"
     }
     ```
@@ -94,33 +94,64 @@
 ### Now what?
 - What do we do next??
 - We've got a function that is supposed to fetch movies from the api, but we don't have any UI to show the results, and we can't save the movies to core data. How can we tell our code is working?
-- This is a great principle to start practicing, isolate PIECES of your code and test them in isolation. 
+- This is a great principle to start practicing, isolate PIECES of your code and test them in separately. 
     - If you have code to run an API call, and code to display api results in a table, and your table is empty, how do you know which code is at fault??
     - Test your API code first without the UI and make sure its working. That way, when your tableview inevitably doesn't work 😅, you know which code is to blame
 - Add `MovieController` if you haven't already
     - Make it look like this:
     ```
     class MovieController {
-    static let shared = MovieController()
-    private let apiController = MovieAPIController()
+        static let shared = MovieController()
+        private let apiController = MovieAPIController()
     
-    func fetchAndSaveMovies(with searchTerm: String) {
-        Task {
-            do {
-                let results = try await apiController.fetchMovies(with: searchTerm)
-                print(results)
-            } catch {
-                print(error)
+        unc fetchAndSaveMovies(with searchTerm: String) {
+            Task {
+                do {
+                    let results = try await apiController.fetchMovies(with: searchTerm)
+                    print(results)
+                } catch {
+                    print(error)
+                }
             }
         }
     }
-    
-}
 
     ```
-## Core Data CRUD
+
+- Then when our app appears, let's call that function and pretend like the user is searching for a movie. Go to the `MovieSearchViewController`
+    - Add a property like this: `private let movieController = MovieController.shared`
+    - Add this inside viewDidLoad:
+        - `movieController.fetchAndSaveMovies(with: "batman")`
+    - Build and Run! (Fix any errors you might have)
+- Did your movies print? No, the correct answer is NO
+- I'm going to give you a couple hints and let you figure this out on your own:
+    - Here's your hints: 
+        - Read the console logs for error messages!
+        - App Transport Security
+        - Custom Coding Keys
+    - Good luck ☘️
+
 ## TableView UI
+- Lets add the search field to the UI so you can run a proper query with a real search term
+- Check out [this stack overflow article](https://stackoverflow.com/a/68283536/4812253) to see how to do it
+- Move the function we had in viewDidLoad to fetch movies to the `updateSearchResults` function. That gets called every time the search string changes
+- Hopefully you can see a search field, type in it, and get movies printing to the console!
+
+## Core Data CRUD
+- So now we need to show those results in the UI right??
+- Well we said we were going to save those results to Core Data and THEN show them in the UI from Core Data
+- How do we save those movies to Core Data? Lets dive in
+### Saving APIMovies to Core Data
+- So we have an array of `[APIMovie]` and we want to save them to Core Data. 
+- Well remember we learned how to do that in the ToDoist app. 
+- You use the special initializer for an `NSManagedObject` subclass and save the context. Let's try it
+- Go to the `MovieController` and look where we're currently just printing the results
+- Let's create a new function called `saveMoviesToCoreData(_ movies: [APIMovie])`
+- It will take in an array of API Movies and save them to Core Data
+- See if you can do that on your own
+
 ## Fetched Results Controller
+
 ## Favorites
 
 # Part 2 - Images + Core Spotlight
