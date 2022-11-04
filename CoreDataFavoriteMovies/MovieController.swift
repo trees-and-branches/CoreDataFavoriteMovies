@@ -24,12 +24,27 @@ class MovieController {
         newMovie.createdAt = Date()
         newMovie.favoritedAt = nil
         newMovie.posterURLString = movie.posterURL?.absoluteString
+        PersistenceController.shared.saveContext()
     }
     
     func unFavoriteMovie(_ movie: Movie) {
-        let context = PersistenceController.shared.viewContext
-        context.delete(movie)
+        viewContext.delete(movie)
         PersistenceController.shared.saveContext()
+    }
+    
+    func favoriteExists(for movie: APIMovie) -> Bool {
+        let fetchRequest = Movie.fetchRequest()
+        let predicate = NSPredicate(format: "imdbID == %@", movie.id)
+        fetchRequest.predicate = predicate
+        let count = try? viewContext.count(for: fetchRequest)
+        return (count ?? 0) > 0
+    }
+    
+    func favoriteMovie(from movie: APIMovie) -> Movie? {
+        let fetchRequest = Movie.fetchRequest()
+        let predicate = NSPredicate(format: "imdbID == %@", movie.id)
+        fetchRequest.predicate = predicate
+        return try? viewContext.fetch(fetchRequest).first
     }
     
 }

@@ -18,6 +18,8 @@
 		2EBFB5582910DE8000182995 /* MovieTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EBFB5572910DE8000182995 /* MovieTableViewCell.swift */; };
 		2EBFB55A2911A0CC00182995 /* MovieAPIController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EBFB5592911A0CC00182995 /* MovieAPIController.swift */; };
 		2EBFB55C2911AA9D00182995 /* MovieController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EBFB55B2911AA9D00182995 /* MovieController.swift */; };
+		2EBFB5662914D82100182995 /* FavoritesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EBFB5652914D82100182995 /* FavoritesViewController.swift */; };
+		2EBFB5682914DD8200182995 /* MovieTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2EBFB5672914DD8200182995 /* MovieTableViewCell.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -34,6 +36,8 @@
 		2EBFB5572910DE8000182995 /* MovieTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieTableViewCell.swift; sourceTree = "<group>"; };
 		2EBFB5592911A0CC00182995 /* MovieAPIController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieAPIController.swift; sourceTree = "<group>"; };
 		2EBFB55B2911AA9D00182995 /* MovieController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieController.swift; sourceTree = "<group>"; };
+		2EBFB5652914D82100182995 /* FavoritesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesViewController.swift; sourceTree = "<group>"; };
+		2EBFB5672914DD8200182995 /* MovieTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MovieTableViewCell.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -71,8 +75,10 @@
 				2EBFB5552910D8D000182995 /* Persistence.swift */,
 				2EBFB542290CFC7600182995 /* MovieSearchViewController.swift */,
 				2EBFB5572910DE8000182995 /* MovieTableViewCell.swift */,
+				2EBFB5672914DD8200182995 /* MovieTableViewCell.xib */,
 				2EBFB5592911A0CC00182995 /* MovieAPIController.swift */,
 				2EBFB55B2911AA9D00182995 /* MovieController.swift */,
+				2EBFB5652914D82100182995 /* FavoritesViewController.swift */,
 				2EBFB544290CFC7600182995 /* Main.storyboard */,
 				2EBFB54A290CFC7700182995 /* Assets.xcassets */,
 				2EBFB54C290CFC7700182995 /* LaunchScreen.storyboard */,
@@ -142,6 +148,7 @@
 			files = (
 				2EBFB54E290CFC7700182995 /* LaunchScreen.storyboard in Resources */,
 				2EBFB54B290CFC7700182995 /* Assets.xcassets in Resources */,
+				2EBFB5682914DD8200182995 /* MovieTableViewCell.xib in Resources */,
 				2EBFB546290CFC7600182995 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -154,6 +161,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				2EBFB543290CFC7600182995 /* MovieSearchViewController.swift in Sources */,
+				2EBFB5662914D82100182995 /* FavoritesViewController.swift in Sources */,
 				2EBFB55A2911A0CC00182995 /* MovieAPIController.swift in Sources */,
 				2EBFB549290CFC7600182995 /* CoreDataFavoriteMovies.xcdatamodeld in Sources */,
 				2EBFB5582910DE8000182995 /* MovieTableViewCell.swift in Sources */,

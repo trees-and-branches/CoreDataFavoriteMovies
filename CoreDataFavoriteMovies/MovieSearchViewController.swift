@@ -24,27 +24,37 @@ class MovieSearchViewController: UIViewController {
         return sc
     }()
     
-    
     override func viewDidLoad() {
         super.viewDidLoad()
-        setUpDataSource()
-        setupNavigationBar()
+        setUpTableView()
+        navigationItem.searchController = searchController
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        var snapshot = datasource.snapshot()
+        guard !snapshot.sectionIdentifiers.isEmpty else { return }
+        snapshot.reloadSections([0])
+        datasource?.apply(snapshot, animatingDifferences: true)
     }
     
 }
 
 private extension MovieSearchViewController {
     
+    func setUpTableView() {
+        setUpDataSource()
+        tableView.register(UINib(nibName: MovieTableViewCell.reuseIdentifier, bundle: nil), forCellReuseIdentifier: MovieTableViewCell.reuseIdentifier)
+    }
+    
     func setUpDataSource() {
         datasource = UITableViewDiffableDataSource<Int, APIMovie>(tableView: tableView) { tableView, indexPath, movie in
             let cell = tableView.dequeueReusableCell(withIdentifier: MovieTableViewCell.reuseIdentifier) as! MovieTableViewCell
-            cell.update(with: movie)
+            cell.update(with: movie) {
+                self.togglefavorite(movie)
+            }
             return cell
         }
-    }
-    
-    func setupNavigationBar() {
-        navigationItem.searchController = searchController
     }
     
     func fetchNewMovies() {
@@ -66,6 +76,22 @@ private extension MovieSearchViewController {
         datasource?.apply(snapshot, animatingDifferences: true)
     }
 
+    func togglefavorite(_ movie: APIMovie) {
+        if let favoriteMovie = movieController.favoriteMovie(from: movie) {
+            movieController.unFavoriteMovie(favoriteMovie)
+        } else {
+            movieController.favoriteMovie(movie)
+        }
+        reload(movie)
+    }
+    
+    func reload(_ movie: APIMovie) {
+        var snapshot = datasource.snapshot()
+        snapshot.reloadItems([movie])
+        datasource?.apply(snapshot, animatingDifferences: true)
+
+    }
+    
 }
 
 
@@ -74,7 +100,9 @@ private extension MovieSearchViewController {
 extension MovieSearchViewController: UISearchResultsUpdating, UISearchControllerDelegate, UISearchBarDelegate {
     
     func updateSearchResults(for searchController: UISearchController) {
-        return
+        if searchController.searchBar.text?.isEmpty == true {
+            fetchNewMovies()
+        }
     }
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
