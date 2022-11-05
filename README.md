@@ -1,38 +1,16 @@
 # CoreDataFavoriteMovies
-# Part 1 - Movie Search + Favorites
-## Initial Setup
-- Create a new XCode project `FavoriteMovies` or `CoreDataFavoriteMovies`
-- Make sure to check both the Core Data and `Host in CloudKit` check boxes
-- These are the files you'll be adding right away:
-    - `PersistenceController.swift`
-    - `MovieSearchViewController.swift`
-    - `MovieController.swift`
-    - `MovieAPIController.swift`
-    - `MovieTableViewCell.swift`
-- Rename `ViewController` to `MovieSearchViewController`
-- Make sure each one is embedded in a NavigationController
-- Lets start in the `MovieSearchViewController`
-    - Add a tableview with an IBOutlet
-    - Set up a diffable datasource similar to `ToDoist`
-- Create the `MovieTableViewCell` that will show both search results and favorite movies
-    - Make sure the cell has a:
-        - title label
-        - year label
-        - poster image
-        - favorite button
-
-## Core Data Model
-- First, set up your Core Data stack by grabbing the Core Data code from the App Delegate and moving it into a `Persistence.swift` file similar to the `ToDoist` project from yesterday
-    - Don't copy the one from `ToDoist` because it will be different
-    - Make sure its got a shared instance and computed var `viewContext` that gives us access to the managed object context
-- Now lets set up the model
-    - Add an Entity called `Movie`
-    - What properties should we give it?
-    - It will be based on what the api can return to us. (skip down to the `Movie API` section to find out what properties the api will return)
-    - Make sure you've got good names and the correct types for each of your attributes. 
+## Get Familiar
+- Start from the main branch of the project
+- It already has some basic pieces in place. 
+- We didn't want to waste too much time with setting this project up and not be able to get to the Core Data stuff
+- Run the project and see how incredible it is!
+    - Who doesn't want an app that ignores your search string and always returns the same 3 movies?! 
+- Then, take a look at each of the files and see how everything works. 
+- First we'll get the API to actually start returning the correct search results
+- Then we'll start adding our favorite movies to Core Data
 
 ## Movie API
-### Test
+### Postman
 - I always like to see the response I'm going to get from API before I try and code it up
 - The api we'll be using can be found [here](http://www.omdbapi.com)
 - Click on the `API Key` tab and get yourself an API key. You'll need it to be able to use the api
@@ -55,13 +33,23 @@
 
 ### Swift
 - Now that we know what this API looks like, lets write the networking code to fetch a movie
-- Add the `MovieAPIController.swift` file to the project
-- This file will be responsible for fetching movies from the api
-- Once we fetch the json from the API, we need to turn it into a Core Data `Movie`
-- But don't forget about the single responsibility principle - The `MovieAPIController` shouldn't be responsible for fetching api movies AND saving them to Core Data!
-- So lets create a struct at the top of the api controller called `APIMovie`. Make it `Codable`
-    - We'll use it just as a transporter of data so the api controller can return `[APIMovie]` and the MovieController can turn them into Core Data `Movie`s
-    - Take another close look at the response from postman. What is the top level object?
+- Go to the `MovieAPIController.swift` file and see what its doing right now. 
+    - Its not even going up to the api! Its just returning those same 3 fake movies every time
+    - Lets fix that
+- Find this function: `func fetchMovies(with searchTerm: String) async throws -> [APIMovie]`
+- We won't tell you everything that will go in this function, you'll need to do some of it on your own. But here's some help:
+    - Don't call the `fakeMovies()` function anymore. We're going to go up to the api
+    - Put your real api key into the apiKey variable
+    - Start with the base url
+    - Add the two query items to the url:
+         - `let apiKeyItem = URLQueryItem(name: "apiKey", value: apiKey)`
+         - `let searchItem = URLQueryItem(name: "s", value: searchTerm)`
+    - Use `URLSession.shared.data(from: url)` to get the data at the url
+    - At this point we have the data from the api. What do we do with it? Well we want to decode it into our `APIMovie`
+    - Go ahead and try to decode the data using a JSONDecoder into `[APIMovie]`
+    
+- . . . And when that doesn't work:
+- Take another close look at the response from postman. What is the top level object?
     ```
     {
     "Search": [
@@ -79,79 +67,148 @@
         case movies = "Search"
     }
     ```
-- Add these properties to the api controller:
-    - `let baseURL = URL(string: "http://www.omdbapi.com/")!`
-    - `let apiKey = "notARealAPIKey"`
-- Now you're ready to add the function that fetches movies. Here's the signature:
-    - `func fetchMovies(with searchTerm: String) async throws -> [APIMovie]`
-    - Inside the function:
-    - Add the two query items to the url:
-         - `let apiKeyItem = URLQueryItem(name: "apiKey", value: apiKey)`
-         - `let searchItem = URLQueryItem(name: "s", value: searchTerm)`
-     - Use `URLSession.shared.data(from: url)` to get the data at the url
-     - Decode the response into a `SearchResponse`
-     - Return the movies of the search response
+    - Update the decoding to decode `SearchResponse.self` instead of `[APIMovie].self`
+    - `return searchResponse.movies`
 ### Now what?
-- What do we do next??
-- We've got a function that is supposed to fetch movies from the api, but we don't have any UI to show the results, and we can't save the movies to core data. How can we tell our code is working?
-- This is a great principle to start practicing, isolate PIECES of your code and test them in separately. 
-    - If you have code to run an API call, and code to display api results in a table, and your table is empty, how do you know which code is at fault??
-    - Test your API code first without the UI and make sure its working. That way, when your tableview inevitably doesn't work 😅, you know which code is to blame
-- Add `MovieController` if you haven't already
-    - Make it look like this:
+- Build and Run
+- Makesure your new movies show up properly from the app
+- But the favorite button doesn't work! It just prints that dump phrase about liking a movie
+- What do we WANT it to do?
+    - When a user hits the heart, we are going to take the `APIMovie` and save an identical core data `Movie`
+    - Then the search view will show api search results, and the favorites view will show Core Data favorites
+    - Lets add that
+ 
+#### Core Data Model
+- So we have a`APIMovie` and we want to save it to Core Data. 
+- First off, we don't even have a Core Data Entity in our Model. Let's do that first.
+- Add an Entity called `Movie`
+- Make it match the `APIMovie`
+    - The only exception being `posterURLString` we will save this image url as a string. 
+    - Go to `APIMovie.swift` and write an extension on `Movie` called `posterURL: URL?` that takes the string from core data and initializes a URL
+
+### Saving APIMovies to Core Data
+- Now we have a core data entity to use. Let's write a function to save an `APIMovie` to core data
+- If you don't remember how, go take a look at the `ToDoist` app for a clue
+- Go to the `MovieController` and write a new function that will take in an `APIMovie` and create a CD `Movie`:
+    - `favoriteMovie(_ movie: APIMovie)`
+- Then in the `MovieSearchViewController` go to the `toggleFavorite` function and call this new function to save the movie to core data
+- Great, now we're saving APIMovies to Core Data when we hit the favorite button. . . at least, we think we are. How can we tell?
+- This whole secret Core Data sql database thing probably still feels a little mysterious I'm guessing. 
+- Let's take a little detour to show you something cool. Its a mac app called `CoreDataLab` made to help with exactly this kind of thing
+
+## Core Data Lab (Detour)
+- The app can be found [here](https://apps.apple.com/us/app/core-data-lab/id1460684638?mt=12)
+- Download it and open it up
+- Click on `Browse iOS simulators`
+- Make sure `CoreDataFavoriteMovies` is running in one of your simulators
+- Select the simulator your running and the `CoreDataFavoriteMovies` app and click `Select`
+- You'll see a window that looks a little like xcode
+- It shows the entity types on the left and all the instances of that type as rows in the main section
+- if you click on a record, you'll see all the details on the right. 
+- If you did it right, you'll see all your favorited movies here in core data lab without ever having to build the UI to show them!
+- So what is this app doing?
+    - Remember Core Data basically is just a framework to host a `.sqlite` file that stores a text representation of your data to that file
+    - This app just finds that sqlite file in the simulator and reads the data inside it
+- We won't go into it too much but this is a great reference for anyone that utilizes Core Data in their group or capstone project
+
+## Favorites UI
+- So now we are saving Favorites to Core Data, let's show them in the Favorites View Controller
+- Add the diffable datasource just like the other view controller
+    - This data source will be displaying the `MovieTableViewCell` the same, but will be based on core data `Movie` instead of `APIMovie`
+    - Write another func called `applyNewSnapshot(from movies: [Movie])`
+        - It will create a snapshot, append the new movies, and apply the snapshot`
+        - It should also show and hide the tableview background view just like in the other view controller
+- We need to make our `MovieTableViewCell` adapt to be able to show an `APIMovie` or a `Movie`
+    - Write a new func just like `update(with: APIMovie)` but instead -> `update(with Movie)`
+    - Now our data source can show cells based on either movie type
+- Add the search controller with the delegate just like in the search view controller
+- Add `func fetchFavorites` 
+    - It will create a fetch request to fetch all the favorite movies
+    - if the search controller's search text is not empty, it will also filter the results using an `NSPredicate`
+        - If you don't remember how to do a fetch request check out [this article](https://www.advancedswift.com/fetch-requests-core-data-swift/)
+        - If you don't remember hwo to do a predicate check out [this article](https://www.advancedswift.com/core-data-string-query-examples-in-swift/)
+    - once you get the results of the fetch request, don't forget to call `applyNewSnapshot`
+- What about if the user changes their mind about a favorite movie?
+    - They will hit the heart button from the favorites view controller to unfavorite a movie
+    - Write a function in the `MovieController` called `unfavoriteMovie(_ movie: Movie)` which deletes the movie from Core Data
+    - Then write a function called `removeFavorite(_ movie: Movie)` in the favorites view controller that calls that function 👆
+    - It should delete that movie from core data and apply a new snapshot deleting that item from the existing snapshot. 
+    - It should look like this:
     ```
-    class MovieController {
-        static let shared = MovieController()
-        private let apiController = MovieAPIController()
-    
-        unc fetchAndSaveMovies(with searchTerm: String) {
-            Task {
-                do {
-                    let results = try await apiController.fetchMovies(with: searchTerm)
-                    print(results)
-                } catch {
-                    print(error)
-                }
-            }
-        }
+    func removeFavorite(_ movie: Movie) {
+        MovieController.shared.unFavoriteMovie(movie)
+        var snapshot = datasource.snapshot()
+        snapshot.deleteItems([movie])
+        datasource?.apply(snapshot, animatingDifferences: true)
     }
 
     ```
+- Build and run!
 
-- Then when our app appears, let's call that function and pretend like the user is searching for a movie. Go to the `MovieSearchViewController`
-    - Add a property like this: `private let movieController = MovieController.shared`
-    - Add this inside viewDidLoad:
-        - `movieController.fetchAndSaveMovies(with: "batman")`
-    - Build and Run! (Fix any errors you might have)
-- Did your movies print? No, the correct answer is NO
-- I'm going to give you a couple hints and let you figure this out on your own:
-    - Here's your hints: 
-        - Read the console logs for error messages!
-        - App Transport Security
-        - Custom Coding Keys
-    - Good luck ☘️
+## Search Favorites
+- Go a head make sure you can:
+    - Build and run, 
+    - search and display movies from the api
+    - Favorite a movie and have it show up in the favorites tab
+    - Unfavorite a movie from the favorite tab and have it removed from core data
+- What happens if you go back to the search view though? Does that movie still show up as a favorite?
+- What about if you try and unfavorite a movie from the search view? 
+- These are inconsistencies between these two views. Lets see if we can fix that. 
+- First is updating unfavorites
+    - This one is fairly easy. 
+    - In the search view, in `viewWillAppear` just use this code to reload the snapshot for any stale data:
+    ```
+    var snapshot = datasource.snapshot()
+    guard !snapshot.sectionIdentifiers.isEmpty else { return }
+    snapshot.reloadSections([0])
+    datasource?.apply(snapshot, animatingDifferences: true)
 
-## TableView UI
-- Lets add the search field to the UI so you can run a proper query with a real search term
-- Check out [this stack overflow article](https://stackoverflow.com/a/68283536/4812253) to see how to do it
-- Move the function we had in viewDidLoad to fetch movies to the `updateSearchResults` function. That gets called every time the search string changes
-- Hopefully you can see a search field, type in it, and get movies printing to the console!
+    ```
+- How about unfavorite from the search view?
+    - This one is a little tricker. Because the api doesn't know about what we have in core data
+    - How can we tell if an `APIMovie` has a favorite counterpart in Core Data?
+    - We need to do a fetch request for a specific movie to see if that APIMovie exists in Core Data as a `Movie` with the same `imdbID`
+    - Add this function to the `MovieController`: 
+        - `func favoriteMovie(from movie: APIMovie) -> Movie? {`
+        - Its a normal Movie fetch request but there is a predicate for a specific `imdbID`
+    - Then, check out `toggleFavorite` in the search view controller. What is it doing?
+    - Its ALWAYS favoriting a movie. But if its already a favorite we want to UNFAVORITE
+    - So use that new function to do an `if else`
+        - If the movie has a favorite, call `MovieController.unfavoriteMovie()` if not, call `MovieController.favoriteMovie()`
+        - Then call the `reload(movie: APIMovie)` func to update the heart on the search cell
+    - Last thing, making sure the cells stay up to date
+        - Go inside the `MovieTableViewCell.update(with: APIMovie)` function
+        - We need to know if the movie we're showing is already favorited or not
+        - At the bottom of the function add this: 
+        ```
+        if MovieController.shared.favoriteMovie(from: movie) != nil {
+            setFavorite()
+        } else {
+            setUnFavorite()
+        }
 
-## Core Data CRUD
-- So now we need to show those results in the UI right??
-- Well we said we were going to save those results to Core Data and THEN show them in the UI from Core Data
-- How do we save those movies to Core Data? Lets dive in
-### Saving APIMovies to Core Data
-- So we have an array of `[APIMovie]` and we want to save them to Core Data. 
-- Well remember we learned how to do that in the ToDoist app. 
-- You use the special initializer for an `NSManagedObject` subclass and save the context. Let's try it
-- Go to the `MovieController` and look where we're currently just printing the results
-- Let's create a new function called `saveMoviesToCoreData(_ movies: [APIMovie])`
-- It will take in an array of API Movies and save them to Core Data
-- See if you can do that on your own
+        ```
+### That's it!
 
-## Fetched Results Controller
-
-## Favorites
-
-# Part 2 - Images + Core Spotlight
+## Black Diamond
+- Add a movie detail view
+- Use the other parameter from the api to fetch a specific movie. api docs [here](http://www.omdbapi.com)
+- When you tap on a movie, use the `imdbID` of the movie to fetch that specific movie. It returns a lot more data. 
+- This is a sample of some of the data from the other api:
+```
+ "Title": "Batman v Superman: Dawn of Justice",
+    "Year": "2016",
+    "Rated": "PG-13",
+    "Released": "25 Mar 2016",
+    "Runtime": "152 min",
+    "Genre": "Action, Adventure, Sci-Fi",
+    "Director": "Zack Snyder",
+    "Writer": "Chris Terrio, David S. Goyer, Bob Kane",
+    "Actors": "Ben Affleck, Henry Cavill, Amy Adams",
+    "Plot": "Fearing that the actions of Superman are left unchecked, Batman takes on the Man of Steel, while the world wrestles with what kind of a hero it really needs.",
+    etc.
+```
+- Then you could show additional data on the detail view. 
+- Update the `APIMovie` and `Movie` models. Add the fields you think are interesting or would want to display in the detail view
+- When a user taps the favorite button, you could fetch the full movie from the api and save all the additional data to core data. 
+- Make sure there is a heart button in the detail that can also add and remove the movie from favorites
