@@ -55,6 +55,56 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		2E87D3542916DF8400481191 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				2EBFB53E290CFC7600182995 /* AppDelegate.swift */,
+				2EBFB540290CFC7600182995 /* SceneDelegate.swift */,
+				2EBFB54A290CFC7700182995 /* Assets.xcassets */,
+				2EBFB54C290CFC7700182995 /* LaunchScreen.storyboard */,
+				2EBFB54F290CFC7700182995 /* Info.plist */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		2E87D3552916DF8F00481191 /* Core Data */ = {
+			isa = PBXGroup;
+			children = (
+				2EBFB5552910D8D000182995 /* Persistence.swift */,
+				2EBFB547290CFC7600182995 /* CoreDataFavoriteMovies.xcdatamodeld */,
+			);
+			path = "Core Data";
+			sourceTree = "<group>";
+		};
+		2E87D3562916DF9B00481191 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				2E9E4BCC2916CE590094E671 /* APIMovie.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		2E87D3572916DFA900481191 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				2EBFB542290CFC7600182995 /* MovieSearchViewController.swift */,
+				2EBFB5572910DE8000182995 /* MovieTableViewCell.swift */,
+				2EBFB5672914DD8200182995 /* MovieTableViewCell.xib */,
+				2EBFB5652914D82100182995 /* FavoritesViewController.swift */,
+				2EBFB544290CFC7600182995 /* Main.storyboard */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		2E87D3582916DFAF00481191 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				2EBFB5592911A0CC00182995 /* MovieAPIController.swift */,
+				2EBFB55B2911AA9D00182995 /* MovieController.swift */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
 		2EBFB532290CFC7600182995 = {
 			isa = PBXGroup;
 			children = (
@@ -74,21 +124,11 @@
 		2EBFB53D290CFC7600182995 /* CoreDataFavoriteMovies */ = {
 			isa = PBXGroup;
 			children = (
-				2EBFB53E290CFC7600182995 /* AppDelegate.swift */,
-				2EBFB540290CFC7600182995 /* SceneDelegate.swift */,
-				2EBFB5552910D8D000182995 /* Persistence.swift */,
-				2EBFB542290CFC7600182995 /* MovieSearchViewController.swift */,
-				2EBFB5572910DE8000182995 /* MovieTableViewCell.swift */,
-				2EBFB5672914DD8200182995 /* MovieTableViewCell.xib */,
-				2EBFB5592911A0CC00182995 /* MovieAPIController.swift */,
-				2E9E4BCC2916CE590094E671 /* APIMovie.swift */,
-				2EBFB55B2911AA9D00182995 /* MovieController.swift */,
-				2EBFB5652914D82100182995 /* FavoritesViewController.swift */,
-				2EBFB544290CFC7600182995 /* Main.storyboard */,
-				2EBFB54A290CFC7700182995 /* Assets.xcassets */,
-				2EBFB54C290CFC7700182995 /* LaunchScreen.storyboard */,
-				2EBFB54F290CFC7700182995 /* Info.plist */,
-				2EBFB547290CFC7600182995 /* CoreDataFavoriteMovies.xcdatamodeld */,
+				2E87D3542916DF8400481191 /* App */,
+				2E87D3552916DF8F00481191 /* Core Data */,
+				2E87D3562916DF9B00481191 /* Model */,
+				2E87D3572916DFA900481191 /* View */,
+				2E87D3582916DFAF00481191 /* Controller */,
 			);
 			path = CoreDataFavoriteMovies;
 			sourceTree = "<group>";
@@ -329,7 +369,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = WK6LDT652Z;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = CoreDataFavoriteMovies/Info.plist;
+				INFOPLIST_FILE = CoreDataFavoriteMovies/App/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
@@ -357,7 +397,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = WK6LDT652Z;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = CoreDataFavoriteMovies/Info.plist;
+				INFOPLIST_FILE = CoreDataFavoriteMovies/App/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
