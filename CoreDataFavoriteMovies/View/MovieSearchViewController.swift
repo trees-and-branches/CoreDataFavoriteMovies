@@ -80,7 +80,7 @@ private extension MovieSearchViewController {
         tableView.backgroundView = movies.isEmpty ? backgroundView : nil
     }
 
-    func togglefavorite(_ movie: APIMovie) {
+    func toggleFavorite(_ movie: APIMovie) {
         print("SEE! I knew you liked \(movie.title)!")
         // TODO: Save movie to core data so it can become a favorite
     }
