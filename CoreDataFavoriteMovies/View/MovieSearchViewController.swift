@@ -81,6 +81,7 @@ private extension MovieSearchViewController {
     }
 
     func togglefavorite(_ movie: APIMovie) {
+        print("SEE! I knew you liked \(movie.title)!")
         // TODO: Save movie to core data so it can become a favorite
     }
     
