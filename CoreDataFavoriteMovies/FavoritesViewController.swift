@@ -89,7 +89,9 @@ private extension FavoritesViewController {
 extension FavoritesViewController: UISearchResultsUpdating, UISearchControllerDelegate, UISearchBarDelegate {
     
     func updateSearchResults(for searchController: UISearchController) {
-        return
+        if searchController.searchBar.text?.isEmpty == true {
+            fetchFavorites()
+        }
     }
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
