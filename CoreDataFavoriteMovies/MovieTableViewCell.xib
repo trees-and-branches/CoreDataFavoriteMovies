@@ -10,24 +10,25 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="MovieTableViewCell" rowHeight="85" id="fdF-dd-WxM" customClass="MovieTableViewCell" customModule="CoreDataFavoriteMovies" customModuleProvider="target">
-            <rect key="frame" x="0.0" y="0.0" width="390" height="85"/>
+        <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="MovieTableViewCell" rowHeight="103" id="fdF-dd-WxM" customClass="MovieTableViewCell" customModule="CoreDataFavoriteMovies" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="397" height="103"/>
             <autoresizingMask key="autoresizingMask"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="fdF-dd-WxM" id="sKX-cu-J3v">
-                <rect key="frame" x="0.0" y="0.0" width="390" height="85"/>
+                <rect key="frame" x="0.0" y="0.0" width="397" height="103"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <stackView opaque="NO" contentMode="scaleToFill" alignment="center" spacing="16" translatesAutoresizingMaskIntoConstraints="NO" id="E1f-n7-UDs">
-                        <rect key="frame" x="20" y="11" width="350" height="63"/>
+                        <rect key="frame" x="20" y="11" width="357" height="81"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="OFw-FQ-E4g">
-                                <rect key="frame" x="0.0" y="0.0" width="50.333333333333336" height="63"/>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="moviePlaceholder" translatesAutoresizingMaskIntoConstraints="NO" id="OFw-FQ-E4g">
+                                <rect key="frame" x="0.0" y="6" width="55" height="69"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="OFw-FQ-E4g" secondAttribute="height" multiplier="4:5" id="P9z-M5-5z0"/>
+                                    <constraint firstAttribute="width" constant="55" id="iTb-Qa-VU4"/>
                                 </constraints>
                             </imageView>
                             <stackView opaque="NO" contentMode="scaleToFill" horizontalCompressionResistancePriority="1000" axis="vertical" alignment="top" spacingType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="Ap6-66-OqM">
-                                <rect key="frame" x="66.333333333333343" y="7.6666666666666679" width="127.33333333333334" height="47.666666666666657"/>
+                                <rect key="frame" x="70.999999999999986" y="16.666666666666668" width="129.66666666666663" height="47.666666666666657"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jJM-zA-JP0">
                                         <rect key="frame" x="0.0" y="0.0" width="41.333333333333336" height="20.333333333333332"/>
@@ -45,11 +46,11 @@
                                 </subviews>
                             </stackView>
                             <view contentMode="scaleToFill" verticalHuggingPriority="249" translatesAutoresizingMaskIntoConstraints="NO" id="91R-8T-hA1" userLabel="Spacer">
-                                <rect key="frame" x="209.66666666666666" y="0.0" width="73.666666666666657" height="63"/>
+                                <rect key="frame" x="216.66666666666666" y="9" width="73.666666666666657" height="63"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </view>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="P7j-0o-kD9">
-                                <rect key="frame" x="299.33333333333331" y="14.333333333333332" width="50.666666666666686" height="34.333333333333343"/>
+                                <rect key="frame" x="306.33333333333331" y="23.333333333333332" width="50.666666666666686" height="34.333333333333343"/>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="plain" image="heart" catalog="system"/>
                                 <connections>
@@ -68,15 +69,16 @@
             </tableViewCellContentView>
             <connections>
                 <outlet property="heartButton" destination="P7j-0o-kD9" id="JYf-xg-MtH"/>
-                <outlet property="posterImage" destination="OFw-FQ-E4g" id="PiK-O3-MCw"/>
+                <outlet property="posterImageView" destination="OFw-FQ-E4g" id="Dig-ID-4QE"/>
                 <outlet property="titleLabel" destination="jJM-zA-JP0" id="4k1-SE-KlP"/>
                 <outlet property="yearLabel" destination="aJe-Vr-bTR" id="Fl3-5I-VeS"/>
             </connections>
-            <point key="canvasLocation" x="-455" y="100"/>
+            <point key="canvasLocation" x="-408.46153846153845" y="129.739336492891"/>
         </tableViewCell>
     </objects>
     <resources>
         <image name="heart" catalog="system" width="128" height="107"/>
+        <image name="moviePlaceholder" width="82" height="114"/>
         <systemColor name="secondaryLabelColor">
             <color red="0.23529411764705882" green="0.23529411764705882" blue="0.2627450980392157" alpha="0.59999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>

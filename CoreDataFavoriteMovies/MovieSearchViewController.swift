@@ -11,6 +11,8 @@ import CoreData
 class MovieSearchViewController: UIViewController {
     
     @IBOutlet weak var tableView: UITableView!
+    @IBOutlet var backgroundView: UIView!
+    
     private let movieController = MovieController.shared
     private var datasource: UITableViewDiffableDataSource<Int, APIMovie>!
 
@@ -35,7 +37,7 @@ class MovieSearchViewController: UIViewController {
         var snapshot = datasource.snapshot()
         guard !snapshot.sectionIdentifiers.isEmpty else { return }
         snapshot.reloadSections([0])
-        datasource?.apply(snapshot, animatingDifferences: true)
+        datasource?.apply(snapshot)
     }
     
 }
@@ -43,6 +45,7 @@ class MovieSearchViewController: UIViewController {
 private extension MovieSearchViewController {
     
     func setUpTableView() {
+        tableView.backgroundView = backgroundView
         setUpDataSource()
         tableView.register(UINib(nibName: MovieTableViewCell.reuseIdentifier, bundle: nil), forCellReuseIdentifier: MovieTableViewCell.reuseIdentifier)
     }
@@ -74,22 +77,17 @@ private extension MovieSearchViewController {
         snapshot.appendSections([0])
         snapshot.appendItems(movies)
         datasource?.apply(snapshot, animatingDifferences: true)
+        tableView.backgroundView = movies.isEmpty ? backgroundView : nil
     }
 
     func togglefavorite(_ movie: APIMovie) {
-        if let favoriteMovie = movieController.favoriteMovie(from: movie) {
-            movieController.unFavoriteMovie(favoriteMovie)
-        } else {
-            movieController.favoriteMovie(movie)
-        }
-        reload(movie)
+        // TODO: Save movie to core data so it can become a favorite
     }
     
     func reload(_ movie: APIMovie) {
         var snapshot = datasource.snapshot()
         snapshot.reloadItems([movie])
         datasource?.apply(snapshot, animatingDifferences: true)
-
     }
     
 }
@@ -100,13 +98,21 @@ private extension MovieSearchViewController {
 extension MovieSearchViewController: UISearchResultsUpdating, UISearchControllerDelegate, UISearchBarDelegate {
     
     func updateSearchResults(for searchController: UISearchController) {
-        if searchController.searchBar.text?.isEmpty == true {
+        if let text = searchController.searchBar.text, text.isEmpty {
             fetchNewMovies()
         }
     }
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         fetchNewMovies()
+    }
+    
+}
+
+extension MovieSearchViewController: UITableViewDelegate {
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
     }
     
 }
