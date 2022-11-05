@@ -54,7 +54,7 @@ private extension MovieSearchViewController {
         datasource = UITableViewDiffableDataSource<Int, APIMovie>(tableView: tableView) { tableView, indexPath, movie in
             let cell = tableView.dequeueReusableCell(withIdentifier: MovieTableViewCell.reuseIdentifier) as! MovieTableViewCell
             cell.update(with: movie) {
-                self.togglefavorite(movie)
+                self.toggleFavorite(movie)
             }
             return cell
         }
