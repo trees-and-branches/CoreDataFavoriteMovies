@@ -96,7 +96,7 @@
 - This whole secret Core Data sql database thing probably still feels a little mysterious I'm guessing. 
 - Let's take a little detour to show you something cool. Its a mac app called `CoreDataLab` made to help with exactly this kind of thing
 
-## Core Data Lab (Detour)
+## Core Data Lab (Detour) - OPTIONAL
 - The app can be found [here](https://apps.apple.com/us/app/core-data-lab/id1460684638?mt=12)
 - Download it and open it up
 - Click on `Browse iOS simulators`
