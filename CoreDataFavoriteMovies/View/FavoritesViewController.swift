@@ -26,6 +26,10 @@ class FavoritesViewController: UIViewController {
         return sc
     }()
     
+    override func viewWillAppear(_ animated: Bool) {
+        fetchFavorites()
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setUpTableView()
