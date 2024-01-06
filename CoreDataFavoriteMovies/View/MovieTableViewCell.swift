@@ -48,7 +48,7 @@ class MovieTableViewCell: UITableViewCell {
         posterImageView.kf.setImage(with: movie.posterURL, placeholder: placeholder)
         titleLabel.text = movie.title
         yearLabel.text = movie.year
-        
+        setFavorite()
     }
     
     

@@ -31,14 +31,17 @@ class FavoritesViewController: UIViewController {
         setUpTableView()
         navigationItem.searchController = searchController
         fetchFavorites()
+//        tableView.reloadData()
     }
 
 }
 
 extension FavoritesViewController: UISearchResultsUpdating, UISearchControllerDelegate, UISearchBarDelegate {
     func updateSearchResults(for searchController: UISearchController) {
-        if let text = searchController.searchBar.text, text.isEmpty {
-            fetchFavorites()
+        if let text = searchController.searchBar.text {
+            
+                fetchFavorites()
+            
         }
     }
 }
@@ -73,7 +76,7 @@ private extension FavoritesViewController {
     func fetchFavorites() {
         let fetchRequest = Movie.fetchRequest()
         if let searchString = searchController.searchBar.text, !searchString.isEmpty {
-            fetchRequest.predicate = NSPredicate(format: "name CONTAINS[cd] %@", searchString)
+            fetchRequest.predicate = NSPredicate(format: "title CONTAINS[c] %@", searchString)
         }
         
         
